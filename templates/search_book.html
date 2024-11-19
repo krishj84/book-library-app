@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Books</title>
+    <style>
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search for a Book</h1>
+    <form method="POST" action="/search">
+        <label>Search by:</label>
+        <select name="criteria">
+            <option value="title" {% if criteria == 'title' %}selected{% endif %}>Title</option>
+            <option value="author" {% if criteria == 'author' %}selected{% endif %}>Author</option>
+            <option value="language" {% if criteria == 'language' %}selected{% endif %}>Language</option>
+            <option value="boolshelves" {% if criteria == 'boolshelves' %}selected{% endif %}>BookShelves</option>
+        </select><br><br>
+        <label>Query:</label><br>
+        <input type="text" name="query" required><br><br>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if results %}
+    <h2>Search Results:</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Language</th>
+                <th>BookShelves</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in results %}
+            <tr>
+                <td>{{ book['title'] }}</td>
+                <td>{{ book['author'] }}</td>
+                <td>{{ book['language'] }}</td>
+                <td>{{ book['bookshelves'] }}</td>
+                <td>
+                    <form method="POST" action="/delete/{{ book['language'] }}" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h2>No results found.</h2>
+    {% endif %}
+
+    <a href="/">Back to Home</a>
+</body>
+</html>
